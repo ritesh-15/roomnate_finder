@@ -1,17 +1,22 @@
 {{> navbar}}
 
-<form class="mb-4" action="">
+<form class="mb-4" action="/room/create-room" method="post">
     <h1 class="text-xl mb-8 font-bold">Create a new room</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="flex flex-col">
             <label for="">Where is room located?</label>
-            <input type="text" name="name" class="px-2 py-3 bg-gray-100 rounded-md
+            <input type="text" name="location" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2">
             <div class="mt-2 flex items-center gap-1 cursor-pointer">
                 <img src="/assets/location.png" class="w-4 h-4 object-contain" alt="">
                 <small>Use my current location</small>
             </div>
+            {{#each errors}}
+            {{#if location}}
+            <small class="text-sm text-red-500">{{message}}</small>
+            {{/if}}
+            {{/each}}
         </div>
 
         <div class="flex flex-col row-span-2">
@@ -23,41 +28,71 @@
             </div>
             <input id="image" type="file" name="image" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2 hidden">
+            {{#each errors}}
+            {{#if image}}
+            <small class="text-sm text-red-500">{{message}}</small>
+            {{/if}}
+            {{/each}}
         </div>
 
         <div class="flex flex-col">
             <label for="">Room name or appartment name</label>
-            <input type="email" name="phone" class="px-2 py-3 bg-gray-100 rounded-md
+            <input type="text" name="name" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2">
+            {{#each errors}}
+            {{#if name}}
+            <small class="text-sm text-red-500">{{message}}</small>
+            {{/if}}
+            {{/each}}
         </div>
 
         <div class="flex flex-col">
             <label for="">Room rent(per month)</label>
-            <input type="email" name="phone" class="px-2 py-3 bg-gray-100 rounded-md
+            <input type="text" name="rent" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2">
+            {{#each errors}}
+            {{#if rent}}
+            <small class="text-sm text-red-500">{{message}}</small>
+            {{/if}}
+            {{/each}}
         </div>
 
         <div class="flex flex-col">
-            <label for="">Ammenities</label>
-            <input type="email" name="phone" class="px-2 py-3 bg-gray-100 rounded-md
+            <label for="">Ammenities(Space seperated)</label>
+            <input type="text" name="ammenities" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2">
+            {{#each errors}}
+            {{#if ammenities}}
+            <small class="text-sm text-red-500">{{message}}</small>
+            {{/if}}
+            {{/each}}
         </div>
 
     </div>
 
     <div class="flex flex-col mt-8">
         <label for="">Description</label>
-        <textarea name="phone" class="px-2 py-3 bg-gray-100 rounded-md
+        <textarea name="description" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2 h-[150px] resize-none"></textarea>
+        {{#each errors}}
+        {{#if description}}
+        <small class="text-sm text-red-500">{{message}}</small>
+        {{/if}}
+        {{/each}}
     </div>
 
     <div class="flex flex-col mt-8">
         <label for="">House rules</label>
-        <textarea name="phone" class="px-2 py-3 bg-gray-100 rounded-md
+        <textarea name="rules" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2 h-[150px] resize-none"></textarea>
+        {{#each errors}}
+        {{#if rules}}
+        <small class="text-sm text-red-500">{{message}}</small>
+        {{/if}}
+        {{/each}}
     </div>
 
-    <button class="px-2 py-3 rounded-md bg-primary text-white mt-8 w-full md:w-fit ml-auto">
+    <button type="submit" class="px-2 py-3 rounded-md bg-primary text-white mt-8 w-full md:w-fit ml-auto">
         Create room
     </button>
 </form>

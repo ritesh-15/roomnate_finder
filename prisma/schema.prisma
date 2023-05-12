@@ -9,13 +9,51 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid()) @map("_id")
-  name      String
-  email     String   @unique
-  password  String
-  image     String?
+  id       String  @id @default(uuid())
+  name     String
+  email    String  @unique
+  password String
+  image    String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  rooms    Room[]
+  requests Roommate[]
+
   @@index([id])
+}
+
+model Room {
+  id          String @id @default(uuid())
+  name        String
+  location    String
+  rent        BigInt
+  ammenities  String
+  description String
+  rules       String
+  image       String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  owner  User?  @relation(fields: [userId], references: [id])
+}
+
+model Roommate {
+  id          String @id @default(uuid())
+  name        String
+  location    String
+  rent        BigInt
+  ammenities  String
+  description String
+  rules       String
+  image       String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner  User?  @relation(fields: [userId], references: [id])
+  userId String
 }

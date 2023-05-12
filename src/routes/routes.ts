@@ -7,13 +7,27 @@ import {
 } from "../controllers/user_controller"
 import { guest } from "../middlewares/guest"
 import { authenticate } from "../middlewares/authenticate"
+import {
+  getCreateRoomController,
+  getRoomController,
+  getRoomDetailsController,
+  postCreateRoomController,
+} from "../controllers/room_controller"
+import { upload } from "../config/multer"
 
 const router: Router = Router()
 
 // rooms
-router.get("/", authenticate, (req, res) => {
-  res.render("home/rooms", { title: "CoLive", rooms: true, user: req.user })
-})
+router.route("/").get(authenticate, getRoomController)
+
+// room details
+router.route("/room/detail/:id").get(authenticate, getRoomDetailsController)
+
+// create room
+router
+  .route("/room/create-room")
+  .get(authenticate, getCreateRoomController)
+  .post(authenticate, upload.single("image"), postCreateRoomController)
 
 // roommates
 router.get("/roommates", authenticate, (req, res) => {
@@ -22,11 +36,6 @@ router.get("/roommates", authenticate, (req, res) => {
     rooms: false,
     user: req.user,
   })
-})
-
-// room details
-router.get("/room/detail/:id", authenticate, (req, res) => {
-  res.render("room/room_detail", { title: "CoLive", user: req.user })
 })
 
 // roommate details
@@ -42,11 +51,6 @@ router.get("/me", authenticate, (req, res) => {
 // user profile
 router.get("/edit-profile", authenticate, (req, res) => {
   res.render("user/edit_profile", { title: "CoLive", user: req.user })
-})
-
-// create room
-router.get("/room/create-room", authenticate, (req, res) => {
-  res.render("room/create", { title: "CoLive", user: req.user })
 })
 
 // find new roommate

@@ -51,7 +51,7 @@ export const getLoginController = async (
   res: Response,
   next: NextFunction
 ) => {
-  return res.render("user/login", { title: "CoLive" })
+  return res.render("user/login")
 }
 
 export const getRegisterController = async (
