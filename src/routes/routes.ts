@@ -1,4 +1,10 @@
 import { Router } from "express"
+import {
+  getLoginController,
+  getRegisterController,
+  postLoginController,
+  postRegisterController,
+} from "../controllers/user_controller"
 
 const router: Router = Router()
 
@@ -41,5 +47,14 @@ router.get("/room/create-room", (req, res) => {
 router.get("/roommate/find-roommate", (req, res) => {
   res.render("roommate/find_roommate", { title: "CoLive" })
 })
+
+// login
+router.route("/login").get(getLoginController).post(postLoginController)
+
+// register
+router
+  .route("/register")
+  .get(getRegisterController)
+  .post(postRegisterController)
 
 export default router

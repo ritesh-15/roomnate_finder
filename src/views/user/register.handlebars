@@ -1,0 +1,57 @@
+{{> navbar}}
+
+<div class="flex gap-8 mt-8 flex-col-reverse md:flex-row">
+
+    <form class="w-full md:max-w-[450px]" action="/register" method="POST">
+        <h1 class="text-xl font-bold mb-1">Let's get started</h1>
+        <p class="mb-4">Create an account in simple step</p>
+
+        <div class="mb-4 flex flex-col">
+            <label for="">Name</label>
+            <input type="text" name="name" class="px-2 py-3 bg-gray-100 rounded-md
+         outline-none mt-2">
+        </div>
+
+        <div class="mb-4 flex flex-col">
+            <label for="">Email address</label>
+            <input type="email" name="email" class="px-2 py-3 bg-gray-100 rounded-md
+         outline-none mt-2">
+        </div>
+
+
+        <div class="mb-4 flex flex-col">
+            <label for="">Password</label>
+            <input type="password" name="password" class="px-2 py-3 bg-gray-100 rounded-md
+         outline-none mt-2">
+        </div>
+
+        <button class="px-2 py-3 rounded-md bg-primary text-white w-full">
+            Create an account
+        </button>
+
+        <div class="mt-4 flex items-center justify-center gap-1">
+            <small>Already have an account?</small>
+            <a class="text-primary font-semibold" href="/login">Login</a>
+        </div>
+    </form>
+
+    <div class="flex items-center justify-center relative">
+
+        <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80"
+            alt="" class="absolute w-12 h-12 rounded-full top-0 object-cover ">
+
+        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fGF2YXRhcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60"
+            alt="" class="absolute w-12 h-12 rounded-full bottom-0 left-20 object-cover ">
+
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGF2YXRhcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60"
+            alt="" class="absolute w-12 h-12 rounded-full top-10 left-10 object-cover ">
+
+        <img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTV8fGF2YXRhcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60"
+            alt="" class="absolute w-12 h-12 rounded-full bottom-10 right-10 object-cover ">
+
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold w-full md:w-[75%] leading-relaxed z-50">Find your next
+            roommate
+            in your community</h1>
+    </div>
+
+</div>
