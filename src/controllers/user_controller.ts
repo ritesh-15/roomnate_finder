@@ -1,37 +1,49 @@
 import { NextFunction, Request, Response } from "express"
-import { ILoginSchema, IRegisterSchema } from "../validation/user_validation"
+import {
+  ILoginSchema,
+  IRegisterSchema,
+  LoginSchema,
+  RegisterSchema,
+} from "../validation/user_validation"
 import { prisma } from "../config/prisma"
 import bcrypt from "bcrypt"
+import { ZodError } from "zod"
+import { User } from "@prisma/client"
+import passport from "passport"
 
 export const postLoginController = async (
   req: Request<{}, {}, ILoginSchema>,
   res: Response,
   next: NextFunction
 ) => {
-  const { email, password } = req.body
-
   try {
-    const user = await prisma.user.findUnique({
-      where: { email },
-    })
+    req.body = await LoginSchema.parseAsync(req.body)
+  } catch (err: any) {
+    const errors = err.issues.map((issue: any) => ({
+      email: issue.path[0] === "email",
+      password: issue.path[0] === "password",
+      message: issue.message,
+    }))
+    return res.render("user/login", { errors, values: req.body })
+  }
+
+  passport.authenticate("local", (e: any, user: User, info: any) => {
+    if (e)
+      return res.render("user/login", { error: info.message, values: req.body })
 
     if (!user)
-      return res.render("user/login", { error: "Invalid username or password" })
+      return res.render("user/login", { error: info.message, values: req.body })
 
-    const isValidPassword = await bcrypt.compare(password, user.password)
+    req.logIn(user, (e) => {
+      if (e)
+        return res.render("user/login", {
+          error: info.message,
+          values: req.body,
+        })
 
-    if (!isValidPassword)
-      res.render("user/login", { error: "Invalid username or password" })
-
-    req.login(user, (err: any) => {
-      console.log(err)
-      throw err
+      return res.redirect("/")
     })
-
-    res.render("user/login")
-  } catch (error: any) {
-    res.render("user/login")
-  }
+  })(req, res, next)
 }
 
 export const getLoginController = async (
@@ -55,37 +67,53 @@ export const postRegisterController = async (
   res: Response,
   next: NextFunction
 ) => {
+  let data: IRegisterSchema | null = null
+
   try {
-    const { name, email, password } = req.body
+    data = await RegisterSchema.parseAsync(req.body)
+  } catch (err: any) {
+    const errors = err.issues.map((issue: any) => ({
+      email: issue.path[0] === "email",
+      password: issue.path[0] === "password",
+      name: issue.path[0] === "name",
+      message: issue.message,
+    }))
 
-    console.log(req.body)
+    return res.render("user/register", { errors, values: req.body })
+  }
 
+  try {
     const isUserExits = await prisma.user.findUnique({
-      where: { email },
+      where: { email: data.email },
     })
 
     if (isUserExits)
       return res.render("user/register", {
-        title: "coLive",
         error: "user with given email already exists!",
+        values: {
+          email: data.email,
+          name: data.name,
+        },
       })
 
-    const hashedPassword = await bcrypt.hash(password, 12)
+    const hashedPassword = await bcrypt.hash(data.password, 12)
 
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
-        ...req.body,
+        ...data,
         password: hashedPassword,
       },
     })
 
-    req.login(user, (err: any) => {
-      console.log(err)
-      throw err
-    })
-
-    res.render("user/register", { title: "coLive" })
+    res.redirect("/login")
   } catch (err: any) {
-    res.render("user/register", { title: "coLive" })
+    res.render("user/register", {
+      title: "coLive",
+      values: {
+        email: data.email,
+        name: data.name,
+      },
+      error: "something went wront while logging you in, please try again! ",
+    })
   }
 }

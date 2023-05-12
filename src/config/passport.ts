@@ -1,18 +1,44 @@
-import passport from "passport"
+import { Strategy as LocalStratergy } from "passport-local"
+import { prisma } from "./prisma"
+import bcrypt from "bcrypt"
+import { PassportStatic } from "passport"
 
-passport.serializeUser(async (user: any, cb) => {
-  console.log(user)
-  process.nextTick(function () {
-    return cb(null, {
-      id: user.id,
-      username: user.username,
-      picture: user.picture,
-    })
-  })
-})
+function passportInit(passport: PassportStatic) {
+  passport.use(
+    new LocalStratergy(
+      { usernameField: "email" },
+      async (email, password, cb) => {
+        try {
+          const user = await prisma.user.findUnique({ where: { email } })
 
-passport.deserializeUser(function (user, cb) {
-  process.nextTick(function () {
-    return cb(null, null)
+          if (!user)
+            return cb(null, false, { message: "Invalid username or password" })
+
+          const isValidPassword = await bcrypt.compare(password, user.password)
+
+          if (!isValidPassword)
+            return cb(null, false, { message: "Invalid username or password" })
+
+          return cb(null, user, { message: "Logged in successfully!" })
+        } catch (err) {
+          return cb(err, false, { message: "Something went wrong!" })
+        }
+      }
+    )
+  )
+
+  passport.serializeUser(async (user: any, cb) => {
+    cb(null, user.id)
   })
-})
+
+  passport.deserializeUser(async (id: any, cb) => {
+    try {
+      const user = await prisma.user.findUnique({ where: { id } })
+      cb(null, user)
+    } catch (e) {
+      cb(e, false)
+    }
+  })
+}
+
+export { passportInit }

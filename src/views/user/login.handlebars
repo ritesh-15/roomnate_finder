@@ -5,10 +5,21 @@
     <form class="w-full md:max-w-[450px]" action="/login" method="POST">
         <h1 class="text-xl font-bold mb-4">Welcome Back</h1>
 
+        {{#if error}}
+        <div class="mb-4 p-3 border border-red-500 rounded-md text-red-500">
+            <small>{{error}}</small>
+        </div>
+        {{/if}}
+
         <div class="mb-4 flex flex-col">
             <label for="">Email address</label>
-            <input required type="email" name="email" class="px-2 py-3 bg-gray-100 rounded-md
+            <input required value="{{values.email}}" type="email" name="email" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2">
+            {{#each errors}}
+            {{#if email}}
+            <small class="text-sm text-red-500">{{message}}</small>
+            {{/if}}
+            {{/each}}
         </div>
 
 
@@ -16,6 +27,11 @@
             <label for="">Password</label>
             <input required type="password" name="password" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2">
+            {{#each errors}}
+            {{#if password}}
+            <small class="text-sm text-red-500">{{message}}</small>
+            {{/if}}
+            {{/each}}
         </div>
 
         <button class="px-2 py-3 rounded-md bg-primary text-white w-full">

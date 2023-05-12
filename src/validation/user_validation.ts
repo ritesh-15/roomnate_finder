@@ -6,7 +6,8 @@ export const RegisterSchema = z.object({
       required_error: "name should be provided!",
       invalid_type_error: "name should be valid!",
     })
-    .trim(),
+    .trim()
+    .min(2, "name must be two character long"),
   email: z
     .string({
       required_error: "email should be provided!",
@@ -23,7 +24,7 @@ export const RegisterSchema = z.object({
     .min(6, "password must be at least 6 characters"),
 })
 
-export type ILoginSchema = z.infer<typeof LoginSchema>
+export type IRegisterSchema = z.infer<typeof RegisterSchema>
 
 export const LoginSchema = z.object({
   email: z
@@ -42,4 +43,4 @@ export const LoginSchema = z.object({
     .min(6, "password must be at least 6 characters"),
 })
 
-export type IRegisterSchema = z.infer<typeof RegisterSchema>
+export type ILoginSchema = z.infer<typeof LoginSchema>

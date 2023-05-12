@@ -1,11 +1,15 @@
-<nav class="flex justify-between py-4">
+<nav class="flex justify-between py-4 items-center">
     <div class="">
         <a href="/">
             <h1 class="text-xl font-bold text-primary">CoLive</h1>
         </a>
     </div>
-    <div class="flex items-center border border-black rounded-full px-3 py-3">
-        <img class="w-6 h-6 object-contain" src="/assets/search.png" alt="">
-        <input class="ml-2 outline-none" placeholder="search for rooms" type="text">
+
+    {{#if user}}
+    <div class="">
+        <img src="https://api.dicebear.com/6.x/big-ears-neutral/svg?seed={{user.id}}" alt=""
+            class="w-12 h-12 rounded-full object-cover ">
     </div>
+    {{/if}}
+
 </nav>

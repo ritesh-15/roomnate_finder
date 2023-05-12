@@ -5,6 +5,8 @@ import { config } from "dotenv"
 import { engine } from "express-handlebars"
 import session from "express-session"
 import passport from "passport"
+import { passportInit } from "./config/passport"
+import morgan from "morgan"
 config()
 
 const app: Application = express()
@@ -18,16 +20,23 @@ const VIEWS_PATH = path.join(ROOT_PATH, "src/views")
 app.use(express.static(PUBLIC_PATH))
 app.use(express.urlencoded({ extended: false }))
 
+app.use(morgan("dev"))
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET!!,
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: true },
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24,
+      secure: process.env.NODE_ENV === "production",
+    },
   })
 )
 
+app.use(passport.initialize())
 app.use(passport.authenticate("session"))
+passportInit(passport)
 
 // view engine
 app.set("view engine", "handlebars")
