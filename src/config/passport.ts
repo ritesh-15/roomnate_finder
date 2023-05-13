@@ -1,5 +1,5 @@
 import { Strategy as LocalStratergy } from "passport-local"
-import { prisma } from "./prisma"
+import DatabaseClient from "./prisma"
 import bcrypt from "bcrypt"
 import { PassportStatic } from "passport"
 
@@ -9,7 +9,9 @@ function passportInit(passport: PassportStatic) {
       { usernameField: "email" },
       async (email, password, cb) => {
         try {
-          const user = await prisma.user.findUnique({ where: { email } })
+          const user = await DatabaseClient.get().user.findUnique({
+            where: { email },
+          })
 
           if (!user)
             return cb(null, false, { message: "Invalid username or password" })
@@ -33,7 +35,7 @@ function passportInit(passport: PassportStatic) {
 
   passport.deserializeUser(async (id: any, cb) => {
     try {
-      const user = await prisma.user.findUnique({ where: { id } })
+      const user = await DatabaseClient.get().user.findUnique({ where: { id } })
       cb(null, user)
     } catch (e) {
       cb(e, false)

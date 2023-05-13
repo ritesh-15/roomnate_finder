@@ -7,7 +7,7 @@ import session from "express-session"
 import passport from "passport"
 import { passportInit } from "./config/passport"
 import morgan from "morgan"
-import { prisma } from "./config/prisma"
+import DatabaseClient from "./config/prisma"
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store")
 config()
 
@@ -21,11 +21,10 @@ async function main() {
 
   // database connection
   try {
-    await prisma.$connect()
+    await DatabaseClient.get().$connect()
     console.log("Database connection established...")
   } catch (e: any) {
     console.log("Database connection error")
-    console.log(e.message)
     process.exit(1)
   }
 
@@ -39,7 +38,7 @@ async function main() {
     session({
       secret: process.env.SESSION_SECRET!!,
       resave: false,
-      store: new PrismaSessionStore(prisma, {
+      store: new PrismaSessionStore(DatabaseClient.get(), {
         checkPeriod: 2 * 60 * 1000, //ms
         dbRecordIdIsSessionId: true,
         dbRecordIdFunction: undefined,
@@ -74,7 +73,7 @@ async function main() {
   )
 
   process.on("SIGINT", async () => {
-    await prisma.$disconnect()
+    await DatabaseClient.get().$disconnect()
     console.log("Connection closed!!!")
   })
 }

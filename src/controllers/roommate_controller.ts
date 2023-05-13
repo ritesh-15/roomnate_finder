@@ -3,7 +3,7 @@ import {
   FindRoommateSchema,
   IFindRoommateSchema,
 } from "../validation/roommate_validation"
-import { prisma } from "../config/prisma"
+import DatabaseClient from "../config/prisma"
 import moment from "moment"
 
 export async function getRoommates(
@@ -12,7 +12,7 @@ export async function getRoommates(
   next: NextFunction
 ) {
   try {
-    const data = await prisma.roommate.findMany({
+    const data = await DatabaseClient.get().roommate.findMany({
       include: {
         owner: {
           select: {
@@ -75,7 +75,7 @@ export async function postFindRoommate(
   }
 
   try {
-    await prisma.roommate.create({
+    await DatabaseClient.get().roommate.create({
       data: {
         ...data,
         userId: req.locals.user?.id!!,
@@ -94,7 +94,7 @@ export async function getRoommateDetails(
   next: NextFunction
 ) {
   try {
-    const data = await prisma.roommate.findUnique({
+    const data = await DatabaseClient.get().roommate.findUnique({
       where: {
         id: req.params.id,
       },

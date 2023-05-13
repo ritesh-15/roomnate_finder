@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import { prisma } from "../config/prisma"
+import DatabaseClient from "../config/prisma"
 
 export async function postSearch(
   req: Request,
@@ -50,7 +50,7 @@ export async function getSearch(
   ]
 
   try {
-    const roomQuery = prisma.room.findMany({
+    const roomQuery = DatabaseClient.get().room.findMany({
       where: {
         OR: conditions,
       },
@@ -64,7 +64,7 @@ export async function getSearch(
         },
       },
     })
-    const roommateQuery = prisma.room.findMany({
+    const roommateQuery = DatabaseClient.get().room.findMany({
       where: {
         OR: conditions,
       },

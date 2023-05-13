@@ -7,7 +7,7 @@ import {
   RegisterSchema,
   UpdateProfileScheam,
 } from "../validation/user_validation"
-import { prisma } from "../config/prisma"
+import DatabaseClient from "../config/prisma"
 import bcrypt from "bcrypt"
 import { User } from "@prisma/client"
 import passport from "passport"
@@ -85,7 +85,7 @@ export const postRegisterController = async (
   }
 
   try {
-    const isUserExits = await prisma.user.findUnique({
+    const isUserExits = await DatabaseClient.get().user.findUnique({
       where: { email: data.email },
     })
 
@@ -101,7 +101,7 @@ export const postRegisterController = async (
 
     const hashedPassword = await bcrypt.hash(data.password, 12)
 
-    await prisma.user.create({
+    await DatabaseClient.get().user.create({
       data: {
         ...data,
         password: hashedPassword,
@@ -128,7 +128,7 @@ export const getProfile = async (
   next: NextFunction
 ) => {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await DatabaseClient.get().user.findUnique({
       where: { id: req.locals.user?.id },
       include: {
         rooms: {
@@ -158,7 +158,7 @@ export const getEditProfile = async (
   next: NextFunction
 ) => {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await DatabaseClient.get().user.findUnique({
       where: {
         id: req.locals.user?.id,
       },
@@ -192,7 +192,7 @@ export const postEditProfile = async (
   }
 
   try {
-    const user = await prisma.user.update({
+    const user = await DatabaseClient.get().user.update({
       where: {
         id: req.locals.user?.id,
       },

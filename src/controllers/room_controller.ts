@@ -3,7 +3,7 @@ import {
   CreateRoomSchema,
   ICreateRoomSchema,
 } from "../validation/room_validation"
-import { prisma } from "../config/prisma"
+import DatabaseClient from "../config/prisma"
 import moment from "moment"
 
 export async function getRoomController(
@@ -12,7 +12,7 @@ export async function getRoomController(
   next: NextFunction
 ) {
   try {
-    const data = await prisma.room.findMany({
+    const data = await DatabaseClient.get().room.findMany({
       include: {
         owner: {
           select: {
@@ -71,7 +71,7 @@ export async function postCreateRoomController(
   }
 
   try {
-    await prisma.room.create({
+    await DatabaseClient.get().room.create({
       data: {
         ...data,
         image: req.file?.filename || "",
@@ -91,7 +91,7 @@ export async function getRoomDetailsController(
   next: NextFunction
 ) {
   try {
-    const room = await prisma.room.findUnique({
+    const room = await DatabaseClient.get().room.findUnique({
       where: { id: req.params.id },
       include: {
         owner: {
@@ -130,9 +130,11 @@ export async function removeRoomController(
   next: NextFunction
 ) {
   try {
-    const room = await prisma.room.findUnique({ where: { id: req.params.id } })
+    const room = await DatabaseClient.get().room.findUnique({
+      where: { id: req.params.id },
+    })
     if (!room) return next(new Error("room not found!"))
-    await prisma.room.delete({ where: { id: req.params.id } })
+    await DatabaseClient.get().room.delete({ where: { id: req.params.id } })
     res.redirect("/")
   } catch (err) {
     next(err)
