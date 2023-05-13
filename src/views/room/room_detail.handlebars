@@ -1,7 +1,7 @@
 {{> navbar}}
 
 <div class="flex gap-4 mt-4 flex-col md:flex-row mb-8">
-    <img class="w-full h-[200px] object-cover rounded-md md:max-w-[450px]" src="/uploads/{{room.image}}" alt="">
+    <img class="w-full h-[200px] object-cover rounded-md md:max-w-[450px]" src="{{room.image}}" alt="">
 
     <div class="flex flex-col">
         <span class="font-light mb-2">{{room.location}}</span>
@@ -12,7 +12,7 @@
         </div>
         <div class="flex gap-2">
             {{#if room.owner.image}}
-            <img class="w-11 h-11 object-cover rounded-full" src="/uploads/{{room.owner.image}}" alt="">
+            <img class="w-11 h-11 object-cover rounded-full" src="{{room.owner.image}}" alt="">
             {{^}}
             <img class="w-11 h-11 object-cover rounded-full"
                 src="https://api.dicebear.com/6.x/initials/svg?seed={{room.owner.name}}" alt="">
@@ -25,12 +25,19 @@
     </div>
 
     {{#if isOwner}}
-    <a class="ml-auto" href="/remove-room/{{room.id}}">
-        <button
-            class="px-2 py-3 rounded-md border border-red-500 text-red-500 hover:text-white hover:bg-red-500 transition-all">
-            Remove room
-        </button>
-    </a>
+    <div class="flex items-center ml-auto gap-4">
+        <a class="" href="/room/update/{{room.id}}">
+            <button class="px-2 py-3 rounded-md border border-primary text-primary transition-all">
+                Edit room
+            </button>
+        </a>
+        <a class="" href="/remove-room/{{room.id}}">
+            <button
+                class="px-2 py-3 rounded-md border border-red-500 text-red-500 hover:text-white hover:bg-red-500 transition-all">
+                Remove room
+            </button>
+        </a>
+    </div>
     {{/if}}
 </div>
 

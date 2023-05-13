@@ -8,6 +8,7 @@ import passport from "passport"
 import { passportInit } from "./config/passport"
 import morgan from "morgan"
 import DatabaseClient from "./config/prisma"
+import { cloudinaryConfig } from "./config/cloudinary"
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store")
 config()
 
@@ -27,6 +28,9 @@ async function main() {
     console.log("Database connection error")
     process.exit(1)
   }
+
+  // cloudinary config
+  cloudinaryConfig()
 
   // middleware
   app.use(express.static(PUBLIC_PATH))

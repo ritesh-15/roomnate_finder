@@ -120,9 +120,28 @@ export async function getRoommateDetails(
     }
 
     res.render("roommate/roommate_detail", {
-      user: req.user,
+      user: req.locals.user,
       roommate,
+      isOwner: roommate.userId === req.locals.user?.id,
     })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export async function removeRoommateController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const room = await DatabaseClient.get().roommate.findUnique({
+      where: { id: req.params.id },
+    })
+    if (!room) return next(new Error("room not found!"))
+    if (room.userId !== req.locals.user?.id) return res.redirect("/")
+    await DatabaseClient.get().roommate.delete({ where: { id: req.params.id } })
+    res.redirect("/")
   } catch (err) {
     next(err)
   }

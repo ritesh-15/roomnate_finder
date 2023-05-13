@@ -8,22 +8,22 @@
     </h1>
 
     {{#if hasRooms}}
-    <div class="mt-8 flex gap-6 flex-col md:flex-row mb-4">
+    <div class="mt-8  gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 mb-4">
         {{#each rooms}}
-        <a class="w-full max-w-[400px]" href="/room/detail/{{id}}">
+        <a class="w-full" href="/room/detail/{{id}}">
             <div class="flex w-full flex-col gap-4 shadow-md hover:shadow-lg rounded-md overflow-hidden cursor-pointer">
-                <img class="w-full h-[200px] object-cover" src="uploads/{{image}}" alt="">
+                <img class="w-full h-[200px] object-cover" src="{{image}}" alt="">
 
                 <div class="flex flex-col p-3">
-                    <span class="font-light mb-2 text-ellipsis">{{location}}</span>
-                    <h1 class="text-xl font-bold mb-2 text-ellipsis line-clamp-2">{{name}}</h1>
+                    <span class="font-light mb-2 text-ellipsis line-clamp-1">{{location}}</span>
+                    <h1 class="text-xl font-bold mb-2 text-ellipsis line-clamp-1">{{name}}</h1>
                     <div class="flex items-center gap-2 mb-2">
                         <span class="font-bold text-lg">$ {{rent}}</span>
                         <small>/ month</small>
                     </div>
                     <div class="flex gap-2">
                         {{#if owner.image}}
-                        <img class="w-11 h-11 object-cover rounded-full" src="/uploads/{{owner.image}}" alt="">
+                        <img class="w-11 h-11 object-cover rounded-full" src="{{owner.image}}" alt="">
                         {{^}}
                         <img class="w-11 h-11 object-cover rounded-full"
                             src="https://api.dicebear.com/6.x/initials/svg?seed={{owner.name}}" alt="">
@@ -51,21 +51,20 @@
     </h1>
     {{#if hasRoommates}}
 
-    <div class="mt-8 flex gap-6 flex-col md:flex-row mb-4">
+    <div class="mt-8 gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  mb-4">
         {{#each roommates}}
         <a href="/roommate/detail/{{id}}">
-            <div
-                class="flex flex-col w-full max-w-[300px] rounded-md overflow-hidden cursor-pointer hover:shadow-lg shadow-md">
+            <div class="flex flex-col w-full rounded-md overflow-hidden cursor-pointer hover:shadow-lg shadow-md">
                 {{#if owner.image}}
-                <img class="w-full h-[250px] object-cover" src="/uploads/{{owner.image}}" alt="">
+                <img class="w-full h-[250px] object-cover" src="{{owner.image}}" alt="">
                 {{^}}
                 <img class="w-full h-[250px] object-cover"
                     src="https://api.dicebear.com/6.x/initials/svg?seed={{owner.name}}" alt="">
                 {{/if}}
 
                 <div class="p-3">
-                    <span class="font-light text-ellipsis">{{location}}</span>
-                    <h1 class="text-xl font-bold line-clamp-2 text-ellipsis">{{name}}</h1>
+                    <span class="font-light text-ellipsis line-clamp-1">{{location}}</span>
+                    <h1 class="text-xl font-bold line-clamp-1 text-ellipsis">{{name}}</h1>
                     <div class="flex items-center gap-2 mb-2">
                         <span class="font-bold text-lg">$ {{rent}}</span>
                         <small>/ month</small>

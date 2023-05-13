@@ -2,8 +2,7 @@
 
 <div class="flex flex-col md:flex-row mb-8">
     {{#if roommate.owner.image}}
-    <img class="w-full md:max-w-[300px] h-[200px] object-cover   rounded-md" src="/uploads/{{roommate.owner.image}}"
-        alt="">
+    <img class="w-full md:max-w-[300px] h-[200px] object-cover   rounded-md" src="{{roommate.owner.image}}" alt="">
     {{^}}
     <img class="w-full md:max-w-[300px] h-[200px] object-cover   rounded-md"
         src="https://api.dicebear.com/6.x/initials/svg?seed={{roommate.owner.name}}" alt="">
@@ -18,6 +17,17 @@
             <small>/ month</small>
         </div>
     </div>
+
+    {{#if isOwner}}
+    <a class="ml-auto" href="/remove-roommate/{{roommate.id}}">
+        <button
+            class="px-2 py-3 rounded-md border border-red-500 text-red-500 hover:text-white hover:bg-red-500 transition-all">
+            Remove request
+        </button>
+    </a>
+    {{/if}}
+
+
 </div>
 
 <div class="border-b border-gray-200 pb-4 mb-8">

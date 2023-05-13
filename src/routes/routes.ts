@@ -15,7 +15,9 @@ import {
   getCreateRoomController,
   getRoomController,
   getRoomDetailsController,
+  getUpdateRoom,
   postCreateRoomController,
+  postUpdateRoom,
   removeRoomController,
 } from "../controllers/room_controller"
 import { upload } from "../config/multer"
@@ -24,6 +26,7 @@ import {
   getRoommateDetails,
   getRoommates,
   postFindRoommate,
+  removeRoommateController,
 } from "../controllers/roommate_controller"
 import { getSearch, postSearch } from "../controllers/search_controller"
 
@@ -37,6 +40,11 @@ router.route("/room/detail/:id").get(authenticate, getRoomDetailsController)
 
 // remove room
 router.route("/remove-room/:id").get(authenticate, removeRoomController)
+
+router
+  .route("/room/update/:id")
+  .get(authenticate, getUpdateRoom)
+  .post(authenticate, upload.single("image"), postUpdateRoom)
 
 // create room
 router
@@ -52,6 +60,9 @@ router
   .route("/roommate/find-roommate")
   .get(authenticate, getFindRoommate)
   .post(authenticate, postFindRoommate)
+
+// remove roommate
+router.route("/remove-roommate/:id").get(authenticate, removeRoommateController)
 
 // roommate details
 router.get("/roommate/detail/:id", authenticate, getRoommateDetails)

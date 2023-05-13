@@ -11,6 +11,8 @@ import DatabaseClient from "../config/prisma"
 import bcrypt from "bcrypt"
 import { User } from "@prisma/client"
 import passport from "passport"
+import { v2 as cloudinary } from "cloudinary"
+import fs from "fs/promises"
 
 export const postLoginController = async (
   req: Request<{}, {}, ILoginSchema>,
@@ -187,19 +189,28 @@ export const postEditProfile = async (
       message: issue.message,
     }))
 
-    return res.render("user/edit_profile", { errors, values: req.body })
+    return res.render("user/edit_profile", { errors, user: req.body })
   }
 
   try {
-    const user = await DatabaseClient.get().user.update({
-      where: {
-        id: req.locals.user?.id,
-      },
-      data: {
-        ...data,
-        image: req.file ? req.file.filename : req.locals.user?.image,
-      },
-    })
+    let uploadResult = null
+
+    if (req.file) uploadResult = await cloudinary.uploader.upload(req.file.path)
+
+    const [user] = await Promise.all([
+      DatabaseClient.get().user.update({
+        where: {
+          id: req.locals.user?.id,
+        },
+        data: {
+          ...data,
+          image: uploadResult
+            ? uploadResult.secure_url
+            : req.locals.user?.image,
+        },
+      }),
+      req.file && fs.unlink(req?.file?.path),
+    ])
 
     req.locals.user = user
 

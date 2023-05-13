@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import DatabaseClient from "../config/prisma"
+import moment from "moment"
 
 export async function postSearch(
   req: Request,
@@ -64,7 +65,7 @@ export async function getSearch(
         },
       },
     })
-    const roommateQuery = DatabaseClient.get().room.findMany({
+    const roommateQuery = DatabaseClient.get().roommate.findMany({
       where: {
         OR: conditions,
       },
@@ -81,8 +82,13 @@ export async function getSearch(
 
     const [rooms, roommates] = await Promise.all([roomQuery, roommateQuery])
 
+    const roomData = rooms.map((room) => ({
+      ...room,
+      createdAt: moment(room.createdAt).fromNow(),
+    }))
+
     res.render("search", {
-      rooms,
+      rooms: roomData,
       roommates,
       hasRooms: rooms.length !== 0,
       hasRoommates: roommates.length !== 0,

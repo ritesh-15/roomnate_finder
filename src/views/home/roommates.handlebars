@@ -1,21 +1,20 @@
 {{> home_layout}}
 
-<div class="mt-8 mb-4 flex flex-wrap gap-6">
+<div class="mt-8 mb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
     {{#each roommates}}
-    <a href="/roommate/detail/{{id}}">
-        <div
-            class="flex flex-col w-full max-w-[300px] rounded-md overflow-hidden cursor-pointer hover:shadow-lg shadow-md">
+    <a class="w-full" href="/roommate/detail/{{id}}">
+        <div class="flex flex-col w-full rounded-md overflow-hidden cursor-pointer hover:shadow-lg shadow-md">
             {{#if owner.image}}
-            <img class="w-full h-[250px] object-cover" src="/uploads/{{owner.image}}" alt="">
+            <img class="w-full h-[250px] object-cover" src="{{owner.image}}" alt="">
             {{^}}
             <img class="w-full h-[250px] object-cover"
                 src="https://api.dicebear.com/6.x/initials/svg?seed={{owner.name}}" alt="">
             {{/if}}
 
             <div class="p-3">
-                <span class="font-light text-ellipsis">{{location}}</span>
-                <h1 class="text-xl font-bold line-clamp-2 text-ellipsis">{{name}}</h1>
+                <span class="font-light line-clamp-1 text-ellipsis">{{location}}</span>
+                <h1 class="text-xl font-bold line-clamp-1 text-ellipsis">{{name}}</h1>
                 <div class="flex items-center gap-2 mb-2">
                     <span class="font-bold text-lg">$ {{rent}}</span>
                     <small>/ month</small>

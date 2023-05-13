@@ -3,6 +3,13 @@
 <form enctype="multipart/form-data" method="post" action="/edit-profile">
     <h1 class="text-xl mb-8 font-bold">Edit profile</h1>
 
+
+    {{#if error}}
+    <div class="mb-4 p-3 border border-red-500 rounded-md text-red-500">
+        <small>{{error}}</small>
+    </div>
+    {{/if}}
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="flex flex-col">
             <label for="">Name</label>
@@ -12,17 +19,21 @@
 
         <div class="flex flex-col h-[200px] row-span-2">
             <label for="">Choose image</label>
-            <div class="w-full hidden rounded-md overflow-hidden h-full" id="image-container">
-                <img class="w-full h-full object-cover" id="show-room-image" src="" alt="">
-            </div>
-            <div id="choose-image-container"
-                class="w-full h-full bg-gray-100 rounded-md flex items-center justify-center mt-2">
-                <label for="room-image">
-                    <img class="w-7 h-7 object-contain cursor-pointer" src="/assets/gallery.png" alt="">
+            <div class="w-full rounded-md relative overflow-hidden h-[300px]">
+                <div class="w-full h-full absolute bg-[rgba(0,0,0,0.2)]"></div>
+
+                <img class="w-full h-full object-cover" id="show-room-image" src="{{user.image}}" alt="">
+
+                <label for="room-image" class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
+                    <div class="bg-gray-200 p-3 rounded-full">
+                        <img class="w-7 h-7 object-contain cursor-pointer" src="/assets/gallery.png" alt="">
+                    </div>
                 </label>
+
                 <input id="room-image" type="file" name="image" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2 hidden">
             </div>
+
 
             {{#each errors}}
             {{#if image}}
@@ -33,7 +44,7 @@
 
         <div class="flex flex-col">
             <label for="">Email address</label>
-            <input disabled value="{{user.email}}" type="email" name="email"
+            <input readonly value="{{user.email}}" type="email" name="email"
                 class="px-2 py-3 bg-white border border-primary rounded-md outline-none mt-2">
         </div>
 
@@ -41,12 +52,24 @@
             <label for="">Where are you located?</label>
             <input value="{{user.location}}" type="text" name="location" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2">
+
+            {{#each errors}}
+            {{#if location}}
+            <small class="text-sm text-red-500">{{message}}</small>
+            {{/if}}
+            {{/each}}
         </div>
 
         <div class="flex flex-col">
             <label for="">Phone number</label>
             <input value="{{user.phone}}" type="text" name="phone" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2">
+
+            {{#each errors}}
+            {{#if phone}}
+            <small class="text-sm text-red-500">{{message}}</small>
+            {{/if}}
+            {{/each}}
         </div>
 
     </div>
@@ -55,6 +78,12 @@
         <label for="">About</label>
         <textarea value="{{user.about}}" name="about" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2 h-[150px] resize-none">{{user.about}}</textarea>
+
+        {{#each errors}}
+        {{#if about}}
+        <small class="text-sm text-red-500">{{message}}</small>
+        {{/if}}
+        {{/each}}
     </div>
 
     <button type="submit" class="px-2 py-3 rounded-md bg-primary text-white mt-8 w-full md:w-fit ml-auto">

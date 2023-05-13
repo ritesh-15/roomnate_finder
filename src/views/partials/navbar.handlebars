@@ -1,7 +1,7 @@
-<nav class="flex justify-between py-4 items-center">
+<nav class="flex justify-between py-4 items-center flex-col gap-4 md:flex-row">
     <div class="">
         <a href="/">
-            <h1 class="text-xl font-bold text-primary">CoLive</h1>
+            <h1 class="text-xl font-bold text-primary">🏠 CoLive</h1>
         </a>
     </div>
 
@@ -18,7 +18,7 @@
         <a href="/me" class="">
             <div class="">
                 {{#if user.image}}
-                <img class="w-11 h-11 object-cover rounded-full" src="/uploads/{{user.image}}" alt="">
+                <img class="w-11 h-11 object-cover rounded-full" src="{{user.image}}" alt="">
                 {{^}}
                 <img class="w-11 h-11 object-cover rounded-full"
                     src="https://api.dicebear.com/6.x/initials/svg?seed={{user.name}}" alt="">

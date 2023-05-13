@@ -1,7 +1,7 @@
 {{> navbar}}
 
-<form enctype="multipart/form-data" class="mb-4" action="/room/create-room" method="post">
-    <h1 class="text-xl mb-8 font-bold">Create a new room</h1>
+<form enctype="multipart/form-data" class="mb-4" action="/room/update/{{room.id}}" method="post">
+    <h1 class="text-xl mb-8 font-bold">Edit a room details</h1>
 
     {{#if error}}
     <div class="mb-4 p-3 border border-red-500 rounded-md text-red-500">
@@ -12,7 +12,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="flex flex-col">
             <label for="">Where is room located?</label>
-            <input type="text" name="location" class="px-2 py-3 bg-gray-100 rounded-md
+            <input value="{{room.location}}" type="text" name="location" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2">
 
             {{#each errors}}
@@ -24,13 +24,12 @@
 
         <div class="flex flex-col h-[200px] md:h-full row-span-2">
             <label for="">Choose image</label>
-            <div class="w-full hidden rounded-md overflow-hidden h-full" id="image-container">
-                <img class="w-full h-full object-cover" id="show-room-image" src="" alt="">
-            </div>
-            <div id="choose-image-container"
-                class="w-full h-full bg-gray-100 rounded-md flex items-center justify-center mt-2">
-                <label for="room-image">
-                    <img class="w-7 h-7 object-contain cursor-pointer" src="/assets/gallery.png" alt="">
+            <div class="w-full relative mb-4 rounded-md overflow-hidden h-[350px]">
+                <img class="w-full h-full object-cover" id="show-room-image" src="{{room.image}}" alt="">
+                <label for="room-image" class="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center">
+                    <div class="bg-gray-200 p-3 rounded-full">
+                        <img class="w-7 h-7 object-contain cursor-pointer" src="/assets/gallery.png" alt="">
+                    </div>
                 </label>
                 <input id="room-image" type="file" name="image" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2 hidden">
@@ -45,7 +44,7 @@
 
         <div class="flex flex-col">
             <label for="">Room name or appartment name</label>
-            <input type="text" name="name" class="px-2 py-3 bg-gray-100 rounded-md
+            <input value="{{room.name}}" type="text" name="name" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2">
             {{#each errors}}
             {{#if name}}
@@ -56,7 +55,7 @@
 
         <div class="flex flex-col">
             <label for="">Room rent(per month)</label>
-            <input type="number" name="rent" class="px-2 py-3 bg-gray-100 rounded-md
+            <input value="{{room.rent}}" type="text" name="rent" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2">
             {{#each errors}}
             {{#if rent}}
@@ -67,7 +66,7 @@
 
         <div class="flex flex-col">
             <label for="">Ammenities(Space seperated)</label>
-            <input type="text" name="ammenities" class="px-2 py-3 bg-gray-100 rounded-md
+            <input value="{{room.ammenities}}" type="text" name="ammenities" class="px-2 py-3 bg-gray-100 rounded-md
          outline-none mt-2">
             {{#each errors}}
             {{#if ammenities}}
@@ -81,7 +80,7 @@
     <div class="flex flex-col mt-8">
         <label for="">Description</label>
         <textarea name="description" class="px-2 py-3 bg-gray-100 rounded-md
-         outline-none mt-2 h-[150px] resize-none"></textarea>
+         outline-none mt-2 h-[150px] resize-none">{{room.description}}</textarea>
         {{#each errors}}
         {{#if description}}
         <small class="text-sm text-red-500">{{message}}</small>
@@ -91,8 +90,8 @@
 
     <div class="flex flex-col mt-8">
         <label for="">House rules</label>
-        <textarea name="rules" class="px-2 py-3 bg-gray-100 rounded-md
-         outline-none mt-2 h-[150px] resize-none"></textarea>
+        <textarea value="{{room.rules}}" name="rules" class="px-2 py-3 bg-gray-100 rounded-md
+         outline-none mt-2 h-[150px] resize-none">{{room.rules}}</textarea>
         {{#each errors}}
         {{#if rules}}
         <small class="text-sm text-red-500">{{message}}</small>
@@ -101,6 +100,6 @@
     </div>
 
     <button type="submit" class="px-2 py-3 rounded-md bg-primary text-white mt-8 w-full md:w-fit ml-auto">
-        Create room
+        Save and Update
     </button>
 </form>
