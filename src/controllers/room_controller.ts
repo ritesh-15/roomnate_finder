@@ -4,13 +4,35 @@ import {
   ICreateRoomSchema,
 } from "../validation/room_validation"
 import { prisma } from "../config/prisma"
+import moment from "moment"
 
-export function getRoomController(
+export async function getRoomController(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  return res.render("home/rooms", { rooms: true, user: req.user })
+  try {
+    const data = await prisma.room.findMany({
+      include: {
+        owner: {
+          select: {
+            id: true,
+            image: true,
+            name: true,
+          },
+        },
+      },
+    })
+
+    const roomsData = data.map((room) => ({
+      ...room,
+      createdAt: moment(room.createdAt).fromNow(),
+    }))
+
+    return res.render("home/rooms", { rooms: true, user: req.user, roomsData })
+  } catch (err) {
+    next(err)
+  }
 }
 
 export function getCreateRoomController(
@@ -52,23 +74,67 @@ export async function postCreateRoomController(
     await prisma.room.create({
       data: {
         ...data,
-        image: req.file?.filename!!,
+        image: req.file?.filename || "",
+        userId: (<any>req.user).id,
       },
     })
 
     res.redirect("/")
   } catch (e) {
-    res.render("room/create", {
-      user: req.user,
-      error: "Something went wrong!",
-    })
+    next(e)
   }
 }
 
-export function getRoomDetailsController(
+export async function getRoomDetailsController(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  res.render("room/room_detail", { user: req.user })
+  try {
+    const room = await prisma.room.findUnique({
+      where: { id: req.params.id },
+      include: {
+        owner: {
+          select: {
+            id: true,
+            image: true,
+            name: true,
+            email: true,
+            phone: true,
+          },
+        },
+      },
+    })
+
+    if (!room) return next()
+
+    const data = {
+      ...room,
+      createdAt: moment(room.createdAt).fromNow(),
+      ammenities: room.ammenities.split(",").map((item) => ({ name: item })),
+    }
+
+    return res.render("room/room_detail", {
+      user: req.user,
+      room: data,
+      isOwner: req.locals.user?.id === data.owner?.id,
+    })
+  } catch (err: any) {
+    next(err)
+  }
+}
+
+export async function removeRoomController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const room = await prisma.room.findUnique({ where: { id: req.params.id } })
+    if (!room) return next(new Error("room not found!"))
+    await prisma.room.delete({ where: { id: req.params.id } })
+    res.redirect("/")
+  } catch (err) {
+    next(err)
+  }
 }

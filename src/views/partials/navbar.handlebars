@@ -5,11 +5,29 @@
         </a>
     </div>
 
-    {{#if user}}
-    <div class="">
-        <img src="https://api.dicebear.com/6.x/big-ears-neutral/svg?seed={{user.id}}" alt=""
-            class="w-12 h-12 rounded-full object-cover ">
+    <div class="flex items-center gap-4">
+
+        <form action="/search" method="post">
+            <div
+                class="border cursor-pointer border-primary rounded-full px-3 py-3 flex items-center gap-2 max-w-[300px]">
+                <img src="/assets/search.png" class="w-6 h-6 object-contain" alt="">
+                <input class="w-full outline-none" type="" name="query" placeholder="search">
+            </div>
+        </form>
+
+
+        {{#if user}}
+        <a href="/me" class="">
+            <div class="">
+                {{#if user.image}}
+                <img class="w-11 h-11 object-cover rounded-full" src="/uploads/{{user.image}}" alt="">
+                {{^}}
+                <img class="w-11 h-11 object-cover rounded-full"
+                    src="https://api.dicebear.com/6.x/initials/svg?seed={{user.name}}" alt="">
+                {{/if}}
+            </div>
+        </a>
+        {{/if}}
     </div>
-    {{/if}}
 
 </nav>

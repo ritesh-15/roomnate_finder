@@ -1,0 +1,82 @@
+{{> navbar}}
+
+
+
+<div class="mt-8 mb-12">
+    <h1 class="font-bold text-2xl mb-4">
+        You might like the following rooms
+    </h1>
+
+    {{#if hasRooms}}
+    <div class="mt-8 flex gap-6 flex-col md:flex-row mb-4">
+        {{#each rooms}}
+        <a class="w-full max-w-[400px]" href="/room/detail/{{id}}">
+            <div class="flex w-full flex-col gap-4 shadow-md hover:shadow-lg rounded-md overflow-hidden cursor-pointer">
+                <img class="w-full h-[200px] object-cover" src="uploads/{{image}}" alt="">
+
+                <div class="flex flex-col p-3">
+                    <span class="font-light mb-2 text-ellipsis">{{location}}</span>
+                    <h1 class="text-xl font-bold mb-2 text-ellipsis line-clamp-2">{{name}}</h1>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="font-bold text-lg">$ {{rent}}</span>
+                        <small>/ month</small>
+                    </div>
+                    <div class="flex gap-2">
+                        {{#if owner.image}}
+                        <img class="w-11 h-11 object-cover rounded-full" src="/uploads/{{owner.image}}" alt="">
+                        {{^}}
+                        <img class="w-11 h-11 object-cover rounded-full"
+                            src="https://api.dicebear.com/6.x/initials/svg?seed={{owner.name}}" alt="">
+                        {{/if}}
+                        <div class="flex flex-col">
+                            <span class="font-semibold">{{owner.name}}</span>
+                            <small class="font-light">{{createdAt}}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        {{/each}}
+    </div>
+    {{^}}
+    <p>No rooms found</p>
+    {{/if}}
+</div>
+
+<div class="h-[0.1em] bg-gray-200 w-full my-4"></div>
+
+<div class="mb-4 mt-8">
+    <h1 class="font-bold text-2xl mb-4">
+        We have found the following roomamtes, you migh like them
+    </h1>
+    {{#if hasRoommates}}
+
+    <div class="mt-8 flex gap-6 flex-col md:flex-row mb-4">
+        {{#each roommates}}
+        <a href="/roommate/detail/{{id}}">
+            <div
+                class="flex flex-col w-full max-w-[300px] rounded-md overflow-hidden cursor-pointer hover:shadow-lg shadow-md">
+                {{#if owner.image}}
+                <img class="w-full h-[250px] object-cover" src="/uploads/{{owner.image}}" alt="">
+                {{^}}
+                <img class="w-full h-[250px] object-cover"
+                    src="https://api.dicebear.com/6.x/initials/svg?seed={{owner.name}}" alt="">
+                {{/if}}
+
+                <div class="p-3">
+                    <span class="font-light text-ellipsis">{{location}}</span>
+                    <h1 class="text-xl font-bold line-clamp-2 text-ellipsis">{{name}}</h1>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="font-bold text-lg">$ {{rent}}</span>
+                        <small>/ month</small>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        {{/each}}
+    </div>
+    {{^}}
+    <p>No roommates found</p>
+    {{/if}}
+</div>

@@ -1,4 +1,4 @@
-import express, { Application } from "express"
+import express, { Application, NextFunction, Request, Response } from "express"
 import path from "path"
 import router from "./routes/routes"
 import { config } from "dotenv"
@@ -8,6 +8,7 @@ import passport from "passport"
 import { passportInit } from "./config/passport"
 import morgan from "morgan"
 import { prisma } from "./config/prisma"
+const { PrismaSessionStore } = require("@quixo3/prisma-session-store")
 config()
 
 async function main() {
@@ -22,8 +23,9 @@ async function main() {
   try {
     await prisma.$connect()
     console.log("Database connection established...")
-  } catch (e) {
+  } catch (e: any) {
     console.log("Database connection error")
+    console.log(e.message)
     process.exit(1)
   }
 
@@ -37,6 +39,11 @@ async function main() {
     session({
       secret: process.env.SESSION_SECRET!!,
       resave: false,
+      store: new PrismaSessionStore(prisma, {
+        checkPeriod: 2 * 60 * 1000, //ms
+        dbRecordIdIsSessionId: true,
+        dbRecordIdFunction: undefined,
+      }),
       saveUninitialized: false,
       cookie: {
         maxAge: 1000 * 60 * 60 * 24,
@@ -56,6 +63,11 @@ async function main() {
 
   // router
   app.use(router)
+
+  // error handler
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    res.render("error")
+  })
 
   app.listen(PORT, () =>
     console.log(`Listening on ${process.env.APP_BASE_URL} 🚀🚀`)

@@ -2,12 +2,13 @@ import { NextFunction, Request, Response } from "express"
 import {
   ILoginSchema,
   IRegisterSchema,
+  IUpdateProfileScheam,
   LoginSchema,
   RegisterSchema,
+  UpdateProfileScheam,
 } from "../validation/user_validation"
 import { prisma } from "../config/prisma"
 import bcrypt from "bcrypt"
-import { ZodError } from "zod"
 import { User } from "@prisma/client"
 import passport from "passport"
 
@@ -76,6 +77,7 @@ export const postRegisterController = async (
       email: issue.path[0] === "email",
       password: issue.path[0] === "password",
       name: issue.path[0] === "name",
+      location: issue.path[0] === "location",
       message: issue.message,
     }))
 
@@ -93,6 +95,7 @@ export const postRegisterController = async (
         values: {
           email: data.email,
           name: data.name,
+          location: data.location,
         },
       })
 
@@ -112,8 +115,112 @@ export const postRegisterController = async (
       values: {
         email: data.email,
         name: data.name,
+        location: data.location,
       },
       error: "something went wront while logging you in, please try again! ",
     })
+  }
+}
+
+export const getProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.locals.user?.id },
+      include: {
+        rooms: {
+          include: {
+            owner: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    })
+
+    console.log(user)
+
+    res.render("user/profile", { user })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const getEditProfile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.locals.user?.id,
+      },
+    })
+
+    res.render("user/edit_profile", { user })
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const postEditProfile = async (
+  req: Request<{}, {}, IUpdateProfileScheam>,
+  res: Response,
+  next: NextFunction
+) => {
+  let data: IUpdateProfileScheam | null = null
+
+  try {
+    data = await UpdateProfileScheam.parseAsync(req.body)
+  } catch (err: any) {
+    const errors = err.issues.map((issue: any) => ({
+      about: issue.path[0] === "about",
+      phone: issue.path[0] === "phone",
+      name: issue.path[0] === "name",
+      location: issue.path[0] === "location",
+      message: issue.message,
+    }))
+
+    return res.render("user/edit_profile", { errors, values: req.body })
+  }
+
+  try {
+    const user = await prisma.user.update({
+      where: {
+        id: req.locals.user?.id,
+      },
+      data: {
+        ...data,
+        image: req.file ? req.file.filename : req.locals.user?.image,
+      },
+    })
+
+    req.locals.user = user
+
+    res.redirect("/me")
+  } catch (err) {
+    next(err)
+  }
+}
+
+export const logoutController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    req.logOut({}, () => {
+      return res.redirect("/login")
+    })
+  } catch (err) {
+    console.log(err)
+    next(err)
   }
 }

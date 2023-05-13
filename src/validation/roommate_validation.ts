@@ -1,17 +1,17 @@
 import z from "zod"
 
-export const CreateRoomSchema = z.object({
-  location: z
-    .string({
-      required_error: "room location must be provided",
-      invalid_type_error: "room location must be type of string",
-    })
-    .trim()
-    .min(1, "required"),
+export const FindRoommateSchema = z.object({
   name: z
     .string({
       required_error: "room name must be provided",
       invalid_type_error: "room name must be type of string",
+    })
+    .trim()
+    .min(1, "required"),
+  location: z
+    .string({
+      required_error: "location must be provided",
+      invalid_type_error: "location must be type of string",
     })
     .trim()
     .min(1, "required"),
@@ -46,4 +46,4 @@ export const CreateRoomSchema = z.object({
     .min(1, "required"),
 })
 
-export type ICreateRoomSchema = z.infer<typeof CreateRoomSchema>
+export type IFindRoommateSchema = z.infer<typeof FindRoommateSchema>

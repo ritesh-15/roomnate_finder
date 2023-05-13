@@ -8,6 +8,13 @@ export const RegisterSchema = z.object({
     })
     .trim()
     .min(2, "name must be two character long"),
+  location: z
+    .string({
+      required_error: "location should be provided!",
+      invalid_type_error: "location should be valid!",
+    })
+    .trim()
+    .min(2, "name must be two character long"),
   email: z
     .string({
       required_error: "email should be provided!",
@@ -44,3 +51,29 @@ export const LoginSchema = z.object({
 })
 
 export type ILoginSchema = z.infer<typeof LoginSchema>
+
+export const UpdateProfileScheam = z.object({
+  name: z
+    .string({
+      required_error: "name should be provided!",
+      invalid_type_error: "name should be valid!",
+    })
+    .trim()
+    .min(2, "name must be two character long"),
+  location: z
+    .string({
+      required_error: "location should be provided!",
+      invalid_type_error: "location should be valid!",
+    })
+    .trim()
+    .min(2, "location must be two character long"),
+  phone: z
+    .string()
+    .trim()
+    .min(10, "phone number must be valid")
+    .max(10, "phone number must be valid")
+    .optional(),
+  about: z.string().trim().optional(),
+})
+
+export type IUpdateProfileScheam = z.infer<typeof UpdateProfileScheam>

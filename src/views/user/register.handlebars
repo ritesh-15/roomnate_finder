@@ -35,6 +35,17 @@
             {{/each}}
         </div>
 
+        <div class="mb-4 flex flex-col">
+            <label for="">Where are you located?</label>
+            <input value="{{values.location}}" type="text" name="location" class="px-2 py-3 bg-gray-100 rounded-md
+         outline-none mt-2">
+            {{#each errors}}
+            {{#if location}}
+            <small class="text-sm text-red-500">{{message}}</small>
+            {{/if}}
+            {{/each}}
+        </div>
+
 
         <div class="mb-4 flex flex-col">
             <label for="">Password</label>
