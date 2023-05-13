@@ -6,7 +6,7 @@
     </div>
 
     <div class="flex items-center gap-4">
-
+        {{#if user}}
         <form action="/search" method="post">
             <div
                 class="border cursor-pointer border-primary rounded-full px-3 py-3 flex items-center gap-2 max-w-[300px]">
@@ -15,8 +15,6 @@
             </div>
         </form>
 
-
-        {{#if user}}
         <a href="/me" class="">
             <div class="">
                 {{#if user.image}}

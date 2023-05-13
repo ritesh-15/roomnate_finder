@@ -137,14 +137,13 @@ export const getProfile = async (
               select: {
                 id: true,
                 name: true,
+                image: true,
               },
             },
           },
         },
       },
     })
-
-    console.log(user)
 
     res.render("user/profile", { user })
   } catch (err) {
