@@ -92,9 +92,9 @@ export async function getSearch(
       roommates,
       hasRooms: rooms.length !== 0,
       hasRoommates: roommates.length !== 0,
+      user: req.user,
     })
   } catch (err) {
-    console.log(err)
     next(err)
   }
 }
