@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    image: "roommate-finder-image"
+    ports:
+      - "9000:9000"
+    env_file:
+      - /.env
+    container_name: "roommate-finder-container"

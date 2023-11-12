@@ -1,0 +1,9 @@
+node_modules
+
+build
+
+.env
+
+screenshots
+
+*-lock.yaml

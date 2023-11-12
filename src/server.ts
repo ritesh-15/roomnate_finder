@@ -18,13 +18,14 @@ async function main() {
   const PORT = process.env.PORT || 9000
   const ROOT_PATH = path.resolve()
   const PUBLIC_PATH = path.join(ROOT_PATH, "public")
-  const VIEWS_PATH = path.join(ROOT_PATH, "src/views")
+  const VIEWS_PATH = path.join(ROOT_PATH, "views")
 
   // database connection
   try {
     await DatabaseClient.get().$connect()
     console.log("Database connection established...")
   } catch (e: any) {
+    console.log(e)
     console.log("Database connection error")
     process.exit(1)
   }
