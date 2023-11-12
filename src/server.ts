@@ -9,13 +9,16 @@ import { passportInit } from "./config/passport"
 import morgan from "morgan"
 import DatabaseClient from "./config/prisma"
 import { cloudinaryConfig } from "./config/cloudinary"
+import { createServer } from "http"
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store")
 config()
 
 async function main() {
   const app: Application = express()
 
-  const PORT = process.env.PORT || 9000
+  const server = createServer(app)
+
+  const PORT = parseInt(process.env.PORT!!) || 9000
   const ROOT_PATH = path.resolve()
   const PUBLIC_PATH = path.join(ROOT_PATH, "public")
   const VIEWS_PATH = path.join(ROOT_PATH, "views")
@@ -73,9 +76,18 @@ async function main() {
     res.render("error")
   })
 
-  app.listen(PORT, () =>
-    console.log(`Listening on ${process.env.APP_BASE_URL} 🚀🚀`)
-  )
+  // server.listen(PORT, () => {
+  //   console.log(server.address())
+  //   console.log(`Listening on ${process.env.APP_BASE_URL} 🚀🚀`)
+  // })
+
+  server.listen(PORT, process.env.HOST, undefined, () => {
+    console.log(`Listening on ${process.env.HOST}:${PORT} 🚀🚀`)
+  })
+
+  // app.listen(`${process.env.HOST}:${PORT}`, () =>
+  //   console.log(`Listening on ${process.env.APP_BASE_URL} 🚀🚀`)
+  // )
 
   process.on("SIGINT", async () => {
     await DatabaseClient.get().$disconnect()
