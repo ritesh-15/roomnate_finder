@@ -6,6 +6,13 @@ services:
     image: "roommate-finder-image"
     ports:
       - "9000:9000"
-    env_file:
-      - /.env
     container_name: "roommate-finder-container"
+    environment:
+      - APP_BASE_URL
+      - DATABASE_URL
+      - SHADOW_DATABASE_URL 
+      - NODE_ENV
+      - SESSION_SECRET
+      - CLOUD_NAME
+      - CLOUDINARY_API_KEY
+      - CLOUDINARY_API_SECRET
