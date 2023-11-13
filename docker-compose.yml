@@ -8,4 +8,4 @@ services:
       - "9000:9000"
     container_name: "roommate-finder-container"
     env_file:
-      - .env
+      - ./.env
